@@ -19,13 +19,14 @@ data = game_data.data
 def check_answer(choice1, choice2):
     answer = ''
     if choice1['follower_count'] > choice2['follower_count']:
-        answer = 'A'
+        answer = 'a'
     if choice1['follower_count'] < choice2['follower_count']:
-        answer ='B'
+        answer ='b'
     return answer
     
 def versus(choice1, choice2):
     print("Game on guys ! Who has more followers ?")
+    print('')
     print(f"Compare A: {choice1['name']}: A {choice1['description']} from {choice1['country']}")
     print(art.vs)
     print(f"Against B: {choice2['name']}: A {choice2['description']} from {choice2['country']}")
@@ -33,31 +34,32 @@ def versus(choice1, choice2):
 
 
 def play_higher_lower():
-    option_a = data[random.randint(0,len(data) - 1)]
-    option_b = data[random.randint(0,len(data) - 1)]
+    option_a = random.choice(data)
+    option_b = random.choice(data)
 
     current_score = 0
     print(art.logo)
 
-    cont_game = 'yes'
-    while cont_game == 'yes':
+    cont_game = True
+    while cont_game:
         versus(option_a,option_b)
         answer = check_answer(option_a, option_b)
-        choice = input("Who has more followers ? 'A' or 'B'?: ")
         
+        choice = input("Who has more followers ? 'A' or 'B'?: ").lower()
         
+        clear()
+
         if choice == answer:
-            print ('You got it right !')
             current_score += 1
             option_a = option_b
-            option_b = data[random.randint(0,len(data) - 1)]
-            clear()
+            option_b = random.choice(data)
+            print (f'You got it right ! Current score is {current_score} \n')
+            
         else:
-            clear()
             print(art.logo)
             print ('Too bad, you lost.')
-            print(f'Your final score is {current_score}')
-            cont_game = 'no'
+            print(f'Your final score is {current_score} \n')
+            cont_game = False
 
 # play = input("Do you want to play the game ? 'y' or 'n': ")
 play_higher_lower()
