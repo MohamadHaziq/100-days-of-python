@@ -127,3 +127,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Do not commit
+*.jpg
+*.csv
+*.json
+*.xlsx
