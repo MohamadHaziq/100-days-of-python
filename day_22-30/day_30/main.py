@@ -6,6 +6,27 @@ import json
 
 FONT_NAME = "Courier"
 IMAGE = "./day_22-30/day_29/logo.png"
+
+# ---------------------------- SEARCH CREDENTIALS ------------------------------- #
+def search_credentials():
+    website_lookup = website_input.get()
+    try:
+        with open("./day_22-30/day_30/data.json", "r") as data_file:
+            data = json.load(data_file)
+    except FileNotFoundError:
+        messagebox.showinfo(title = "Error !", message = "No data file found")
+
+    else:
+        if website_lookup in data:
+            valid_credentials = data[website_lookup]
+            username = valid_credentials['username']
+            password = valid_credentials['password']
+            messagebox.showinfo(title = website_lookup, message = f"These are the details entered: \nUsername: {username} \nPassword: {password}")
+
+        else:
+            messagebox.showinfo(title = website_lookup, message = f"No credentials found for {website_lookup}")
+    
+
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 #Password Generator Project
 def generate_password():
@@ -36,14 +57,32 @@ def save_password():
     website = website_input.get()
     username = username_input.get()
     password = password_input.get()
+    new_data = {
+        website : {
+            "username" : username,
+            "password" : password,
+        }     
+    }
 
     if len(website) == 0 or len(password) == 0:
         messagebox.showinfo(title="Whoops", message= "Do not leave fields blank !")
     else:
         is_ok = messagebox.askokcancel(title = website, message = f"These are the details entered: \nUsername: {username} \nPassword: {password}")
         if is_ok:
-            with open("./day_22-30/day_29/data.json", "a") as f:
-                f.write(f"{website} | {username} | {password}\n")
+            try:
+                with open("./day_22-30/day_30/data.json", "r") as data_file:
+                    data = json.load(data_file)
+                    data.update(new_data)
+
+            except FileNotFoundError:
+                with open("./day_22-30/day_30/data.json", "w") as data_file:
+                    json.dump(data, data_file, indent = 4)
+
+            else:
+                with open("./day_22-30/day_30/data.json", "w") as data_file:
+                    json.dump(data, data_file, indent = 4)
+
+            finally:
                 website_input.delete(0, tk.END)
                 password_input.delete(0, tk.END)
 
@@ -63,15 +102,18 @@ canvas.grid(column = 1, row = 0)
 website_label = tk.Label(text = "Website: ")
 website_label.grid(column = 0, row = 1)
 
-website_input = tk.Entry(width = 35)
-website_input.grid(column = 1, row = 1, columnspan = 2)
+website_input = tk.Entry(width = 21)
+website_input.grid(column = 1, row = 1)
 website_input.focus()
+
+search_button = tk.Button(text = "Search", command = search_credentials, width = 14)
+search_button.grid(column = 2, row = 1)
 
 # Email/Username Related
 username_label = tk.Label(text = "Email/Username: ")
 username_label.grid(column = 0, row = 2)
 
-username_input = tk.Entry(width = 35)
+username_input = tk.Entry(width = 39)
 username_input.grid(column = 1, row = 2, columnspan = 2)
 username_input.insert(0, "test@test.com")
 
