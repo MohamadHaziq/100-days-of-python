@@ -134,3 +134,4 @@ dmypy.json
 *.json
 *.xlsx
 *.txt
+*.exe
